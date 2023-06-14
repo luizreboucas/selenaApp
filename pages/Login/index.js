@@ -25,7 +25,7 @@ const Login = ({navigation}) => {
       const response = await axios.post(`${URI}/wp-json/learnpress/v1/token`, user)
       const token = response.data.token
       if(await validateToken(token) === 200){
-        navigation.navigate('Courses', {token, user, URI})
+        navigation.navigate('Courses', {token, user, URI, validateToken})
       }
     } catch (error) {
       console.warn({message: 'validation error', error})

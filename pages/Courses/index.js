@@ -11,7 +11,9 @@ const Courses = ({route, navigation}) => {
       const getCourses = async() => {
         try {
           const coursesResponse = (await axios.get(`${URI}/wp-json/learnpress/v1/courses`,{
-            page,
+            params:{
+              page
+            },
             headers:{
               Authorization: `Bearer ${token}`
             }
@@ -24,7 +26,7 @@ const Courses = ({route, navigation}) => {
       }
 
       getCourses()
-    },[])
+    },[page])
   const getLessons = async(course) => {
     try {
       const id = course.id
@@ -48,6 +50,13 @@ const Courses = ({route, navigation}) => {
           }}
           keyExtractor={(item) => item.id}
         />
+        <View style={styles.buttons}>
+            <Text style={styles.button} onPress={()=>{
+                setPage(page === 1? page: page - 1)
+                console.log(`###################################################################################${page}`)
+            }}>-</Text>
+            <Text style={styles.button} onPress={()=>setPage(page + 1)}>+</Text>
+        </View>
     </View>
   )
 }
@@ -73,5 +82,14 @@ const styles = StyleSheet.create({
   },
   border: {
     borderRadius: 30
+  },
+  buttons: {
+    flexDirection: 'row',
+    gap: 40,
+    padding: 10
+  },
+  button: {
+    fontSize: 40,
+    fontWeight: 'bold'
   }
 })

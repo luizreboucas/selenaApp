@@ -34,8 +34,7 @@ const Lessons = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-        <Text>lessons</Text>
-        <Text>{token}</Text>
+        
         <FlatList
             data={lessons}
             renderItem={({item}) => {
