@@ -15,8 +15,8 @@ const Login = ({navigation}) => {
 
   const URI = 'https://myselena.org'
   const [user, setUser] = useState({
-    username: '',
-    password: ''
+    username: 'luizreboucas',
+    password: 'Luig&1010'
   })
 
   const getToken = async() => {
@@ -24,9 +24,25 @@ const Login = ({navigation}) => {
       
       const response = await axios.post(`${URI}/wp-json/learnpress/v1/token`, user)
       const token = response.data.token
-      navigation.navigate('Courses', {token})
+      if(await validateToken(token) === 200){
+        navigation.navigate('Courses', {token, user, URI})
+      }
     } catch (error) {
       console.warn({message: 'validation error', error})
+    }
+  }
+
+  const validateToken = async(token) => {
+    try {
+      const response = await axios.post(`${URI}/wp-json/learnpress/v1/token/validate`,{},{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return(response.data.data.status)
+
+    } catch (error) {
+      return({error})
     }
   }
 
@@ -75,16 +91,6 @@ const styles = StyleSheet.create({
     width: WindowWidth * 0.8,
     height: WindowHeight * 0.5,
     justifyContent: 'space-evenly',
-  },
-  shadowProp: {
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  elevation: {
-    elevation: 20,
-    shadowColor: '#52006A',
   },
   input: {
     fontSize: 24,
