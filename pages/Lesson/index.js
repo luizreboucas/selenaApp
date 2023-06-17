@@ -3,13 +3,14 @@ import React,{useEffect, useState} from 'react'
 import { View,Text, Pressable,Image } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 import * as Linking from 'expo-linking';
-
+import * as WebBrowser from 'expo-web-browser'
 
 
 const Lesson = ({navitagion, route}) => {
     const {lessonId, token, URI, user} = route.params
     const [lesson, setLesson] = useState({})
     const [pdfLink, setPdfLink] = useState('')
+    const [pdf, setPdf] = useState()
     useEffect(()=>{
         const getLesson = async() => {
             const extractDownloadLink = (content) => {
@@ -38,23 +39,10 @@ const Lesson = ({navitagion, route}) => {
         
     },[])
 
-    const downloadPDF = async () => {
-        const url = `${pdfLink}`; // Substitua pela URL real do arquivo PDF que você deseja baixar
-      
-        const downloadDest = `${FileSystem.documentDirectory}myFile.pdf`;
-      
-        try {
-          const { uri } = await FileSystem.downloadAsync(url, downloadDest);
-          
-          console.log('Arquivo PDF baixado para:', uri);
-          
-          // Faça algo com o arquivo PDF baixado, como exibi-lo ou salvá-lo no armazenamento do dispositivo.
-        } catch (error) {
-          console.log('Erro ao baixar o arquivo PDF:', error);
-        }
-      };
-      const getPdf = () => {
-        Linking.openURL(pdfLink)
+   
+      const getPdf = async() => {
+        const result = await WebBrowser.openBrowserAsync(pdfLink)
+        setPdf(result)
       }
       
   return (
@@ -66,6 +54,7 @@ const Lesson = ({navitagion, route}) => {
             <Text onPress={getPdf}>
                 Download Pdf
             </Text>
+            
         </Pressable>
         
     </View>
